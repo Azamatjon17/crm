@@ -1,3 +1,5 @@
+import 'package:crm/controllers/auth_controller.dart';
+import 'package:crm/ui/screens/home_screen.dart';
 import 'package:crm/ui/screens/phone_validation_screen.dart';
 import 'package:crm/ui/screens/register_screen.dart';
 import 'package:flutter/cupertino.dart';
@@ -5,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:icons_flutter/icons_flutter.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -14,6 +17,24 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final phoneController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  signIn() async {
+    if (passwordController.text.isNotEmpty && phoneController.text.isNotEmpty) {
+      showDialog(
+        context: context,
+        builder: (context) => const AlertDialog(
+          content: CircularProgressIndicator(),
+        ),
+      );
+      final auth = context.read<AuthController>();
+      await auth.siginIn(phoneController.text, passwordController.text);
+      Navigator.pop(context);
+      Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen(),),);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,13 +82,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        "  Email Address",
+                        "  Phone",
                         style: TextStyle(
                           color: Color(0xff7D8592),
                           fontSize: 15,
                         ),
                       ),
                       TextField(
+                        controller: phoneController,
                         decoration: InputDecoration(
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20),
@@ -75,7 +97,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 color: Color(0xffB8C8E0),
                               ),
                             ),
-                            hintText: "youremail@gmail.com",
+                            hintText: "+9981234567",
                             hintStyle: const TextStyle(
                               color: Colors.grey,
                             )),
@@ -94,6 +116,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       TextField(
+                        controller: passwordController,
                         decoration: InputDecoration(
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20),
@@ -137,14 +160,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ],
                   ),
                   InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => PhoneValidationScreen(),
-                        ),
-                      );
-                    },
+                    onTap: signIn,
                     child: Container(
                       width: double.infinity,
                       alignment: Alignment.center,
