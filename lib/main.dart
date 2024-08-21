@@ -1,28 +1,39 @@
-import 'package:crm/controllers/auth_controller.dart';
+import 'package:crm/bloc/auth_bloc/auth_bloc.dart';
+import 'package:crm/bloc/auth_bloc/auth_event.dart';
+import 'package:crm/bloc/auth_bloc/auth_state.dart';
+import 'package:crm/ui/screens/home_screen.dart';
 import 'package:crm/ui/screens/login_screen.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
-  runApp(const MainApp());
+  final dio = Dio();
+  runApp(MyApp(dio));
 }
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+class MyApp extends StatelessWidget {
+  final Dio dio;
+
+  const MyApp(this.dio, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
-      designSize: Size(375, 812),
-      child: ChangeNotifierProvider(
-        create: (context) => AuthController(),
-        child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            scaffoldBackgroundColor: Colors.blue.shade50,
-          ),
-          home: LoginScreen(),
+    return MaterialApp(
+      home: BlocProvider(
+        create: (context) => AuthBloc(dio)..add(CheckAuthStatusEvent()),
+        child: BlocBuilder<AuthBloc, AuthState>(
+          builder: (context, state) {
+            if (state is Authenticated) {
+              return const HomeScreen();
+            } else if (state is Unauthenticated) {
+              return const LoginScreen();
+            } else {
+              return const Scaffold(
+                body: Center(child: CircularProgressIndicator()),
+              );
+            }
+          },
         ),
       ),
     );
