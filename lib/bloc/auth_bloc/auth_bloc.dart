@@ -21,7 +21,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             'password_confirmation': event.passwordConfirmation,
           },
         );
-        final token = response.data['token'];
+        print(response);
+        final token = response.data['data']['token'];
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('auth_token', token);
         emit(Authenticated());

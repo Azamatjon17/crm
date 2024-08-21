@@ -32,13 +32,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
             );
           } else if (state is Authenticated) {
-            Navigator.pop(context); // close the dialog
+            Navigator.pop(context); // Close the dialog
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => const HomeScreen()),
             );
           } else if (state is AuthError) {
-            Navigator.pop(context); // close the dialog
+            Navigator.pop(context); // Close the dialog
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(state.message)),
             );
@@ -51,8 +51,50 @@ class _RegisterScreenState extends State<RegisterScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                // Your existing UI code here
-                // Replace the onTap for sign up with:
+                TextFormField(
+                  decoration: const InputDecoration(labelText: 'Name'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your name';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) => _name = value!,
+                ),
+                TextFormField(
+                  decoration: const InputDecoration(labelText: 'Phone'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your phone number';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) => _phone = value!,
+                ),
+                TextFormField(
+                  decoration: const InputDecoration(labelText: 'Password'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your password';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) => _password = value!,
+                ),
+                TextFormField(
+                  decoration:
+                      const InputDecoration(labelText: 'Confirm Password'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please confirm your password';
+                    }
+                    if (value != _password) {
+                      return null;
+                    }
+                    return null;
+                  },
+                  onSaved: (value) => _passwordConfirmation = value!,
+                ),
                 InkWell(
                   onTap: () {
                     if (_formKey.currentState!.validate()) {
@@ -65,7 +107,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ));
                     }
                   },
-                  // existing code
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 15),
+                    width: double.infinity,
+                    alignment: Alignment.center,
+                    color: Colors.blue,
+                    child: const Text(
+                      'Sign Up',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
                 ),
               ],
             ),

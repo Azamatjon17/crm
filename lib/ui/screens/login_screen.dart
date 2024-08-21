@@ -3,7 +3,6 @@ import 'package:crm/bloc/auth_bloc/auth_event.dart';
 import 'package:crm/bloc/auth_bloc/auth_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'home_screen.dart';
 import 'register_screen.dart';
 
@@ -32,13 +31,13 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             );
           } else if (state is Authenticated) {
-            Navigator.pop(context); // close the dialog
+            Navigator.pop(context); // Close the dialog
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => const HomeScreen()),
             );
           } else if (state is AuthError) {
-            Navigator.pop(context); // close the dialog
+            Navigator.pop(context); // Close the dialog
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(state.message)),
             );
@@ -52,7 +51,6 @@ class _LoginScreenState extends State<LoginScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 // Your existing UI code here for the phone and password fields
-                // Example:
                 TextFormField(
                   decoration: const InputDecoration(labelText: 'Phone'),
                   validator: (value) {

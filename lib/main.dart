@@ -19,10 +19,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: BlocProvider(
-        create: (context) => AuthBloc(dio)..add(CheckAuthStatusEvent()),
-        child: BlocBuilder<AuthBloc, AuthState>(
+    return BlocProvider(
+      create: (context) => AuthBloc(dio)..add(CheckAuthStatusEvent()),
+      child: MaterialApp(
+        home: BlocBuilder<AuthBloc, AuthState>(
           builder: (context, state) {
             if (state is Authenticated) {
               return const HomeScreen();
