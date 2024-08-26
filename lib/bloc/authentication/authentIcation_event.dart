@@ -1,0 +1,28 @@
+import 'package:crm/data/model/login_request_model.dart';
+import 'package:crm/data/model/registration_model.dart';
+
+sealed class AuthenticationEvent{}
+
+final class StartAuthenticationEvent extends AuthenticationEvent{}
+
+final class LogInAuthenticationEvent extends AuthenticationEvent{
+  LoginRequestModel requestModel;
+
+  LogInAuthenticationEvent({required this.requestModel,});
+}
+
+final class ClearErrorMessageAuthenticationEvent extends AuthenticationEvent{}
+
+final class SignUpAuthenticationEvent extends AuthenticationEvent{
+  RegistrationModel model;
+
+  SignUpAuthenticationEvent({required this.model});
+}
+
+final class ForgotPasswordAuthenticationEvent extends AuthenticationEvent{
+  String email;
+
+  ForgotPasswordAuthenticationEvent(this.email);
+}
+
+final class LogOutAuthenticationEvent extends AuthenticationEvent{}
